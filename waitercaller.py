@@ -55,13 +55,19 @@ def logout():
 
 @app.route("/")
 def home():
-    return render_template("home.html")
+    return render_template("home_1.html")
+
+
+@app.route("/dashboard")
+@login_required
+def dashboard():
+    return render_template("dashboard.html")
 
 
 @app.route("/account")
 @login_required
 def account():
-    return "You are logged in"
+    return render_template("account.html")
 
 
 if __name__ == '__main__':
