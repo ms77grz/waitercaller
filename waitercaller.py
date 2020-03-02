@@ -1,6 +1,6 @@
 import config
 from flask import Flask, render_template, redirect, url_for, request
-from flask_login import LoginManager, login_required, login_user, logout_user
+from flask_login import LoginManager, login_required, login_user, logout_user, current_user
 from mockdbhelper import MockDBHelper as DBHelper
 from passwordhelper import PasswordHelper
 from user import User
@@ -55,7 +55,7 @@ def logout():
 
 @app.route("/")
 def home():
-    return render_template("home_1.html")
+    return render_template("home.html")
 
 
 @app.route("/dashboard")
@@ -67,7 +67,26 @@ def dashboard():
 @app.route("/account")
 @login_required
 def account():
-    return render_template("account.html")
+    tables = DB.get_tables(current_user.get_id())
+    return render_template("account.html", tables=tables)
+
+
+@app.route("/account/createtable", methods=["POST"])
+@login_required
+def account_createtable():
+    tablename = request.form.get("tablenumber")
+    tableid = DB.add_table(tablename, current_user.get_id())
+    new_url = config.BASE_URL + "newrequest/" + tableid
+    DB.update_table(tableid, new_url)
+    return redirect(url_for("account"))
+
+
+@app.route("/account/deletetable")
+@login_required
+def account_deletetable():
+    tableid = request.form.get("tableid")
+    DB.delete_table(tableid)
+    return redirect(url_for("account"))
 
 
 if __name__ == '__main__':
