@@ -66,9 +66,9 @@ def home():
 def dashboard():
     now = datetime.datetime.now()
     requests = DB.get_requests(current_user.get_id())
-    for req in requests:
-        deltaseconds = (now - req["time"]).seconds
-        req["wait_minutes"] = "{}.{}".format(
+    for request in requests:
+        deltaseconds = (now - request["time"]).seconds
+        request["wait_minutes"] = "{}.{}".format(
             (deltaseconds / 60),
             str(deltaseconds % 60).zfill(2)
         )
