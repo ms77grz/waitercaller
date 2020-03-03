@@ -3,6 +3,7 @@ import datetime
 from bitlyhelper import BitlyHelper
 from flask import Flask, render_template, redirect, url_for, request
 from flask_login import LoginManager, login_required, login_user, logout_user, current_user
+from forms import RegistrationForm
 from mockdbhelper import MockDBHelper as DBHelper
 from passwordhelper import PasswordHelper
 from user import User
@@ -38,14 +39,14 @@ def login():
 @app.route("/register", methods=["POST"])
 def register():
     email = request.form.get("email")
-    pw1 = request.form.get("password")
-    pw2 = request.form.get("password2")
-    if not pw1 == pw2:
+    password1 = request.form.get("password1")
+    password2 = request.form.get("password2")
+    if not password1 == password2:
         return redirect(url_for("home"))
     if DB.get_user(email):
         return redirect(url_for("home"))
     salt = PH.get_salt()
-    hashed = PH.get_hash(pw1 + salt)
+    hashed = PH.get_hash(password1 + salt)
     DB.add_user(email, salt, hashed)
     return redirect(url_for("home"))
 
@@ -58,7 +59,8 @@ def logout():
 
 @app.route("/")
 def home():
-    return render_template("home.html")
+    registrationform = RegistrationForm()
+    return render_template("home.html", registrationform=registrationform)
 
 
 @app.route("/dashboard")
