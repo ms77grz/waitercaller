@@ -1,0 +1,28 @@
+use sandbox
+
+db.people.insert({"name": "John Smith", "age": 35})
+
+db.people.insert({"name": "Mary Jones"})
+
+db.people.find()
+
+db.people.find({"name": "John Smith"})
+
+db.people.find({"name":"John Smith"}, {"age":1})
+
+db.people.find({"name":"John Smith"}, {"age":1, "_id": 0})
+
+db.people.find({"name":"John Smith", "age":1})
+db.people.find({"name":"John Smith"}, {"age":1})
+
+db.people.update({"name":"John Smith"}, {"name":"John Smith", "age":43})
+
+db.people.update({"name":"John Smith"}, {$set: {"age":35}})
+
+db.people.remove({"name":"John Smith"})
+
+db.people.find()
+
+db.people.remove({})
+
+db.people.find()
